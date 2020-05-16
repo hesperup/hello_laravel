@@ -10933,3 +10933,43 @@ a.text-dark:focus {
   }
 }
 
+.navbar-inverse {
+  background-color: #3c3e42;
+}
+
+a {
+  color: white;
+}
+
+a:hover {
+  color: 0;
+}
+
+/* footer */
+
+footer {
+  margin-top: 45px;
+  padding-top: 5px;
+  border-top: 1px solid #eaeaea;
+  color: #777;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+footer a {
+  color: #555;
+}
+
+footer a:hover {
+  color: #222;
+}
+
+footer small {
+  float: left;
+}
+
+footer img.brand-icon {
+  width: 17px;
+  height: 17px;
+}
+
