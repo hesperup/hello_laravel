@@ -70,6 +70,15 @@ class UserController extends Controller
         return redirect()->route('users.show', $user->id);
     }
 
+
+    public function destroy(User $user = null)
+    {
+        $this->authorize('delete', $user);
+        $user->delete();
+        session()->flash('success', '成功删除用户！');
+        return back();
+    }
+
     public function __construct()
     {
         # code...
@@ -80,4 +89,6 @@ class UserController extends Controller
             'only' => ['create']
         ]);
     }
+
+
 }
