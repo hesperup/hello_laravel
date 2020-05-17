@@ -10937,14 +10937,6 @@ a.text-dark:focus {
   background-color: #3c3e42;
 }
 
-a {
-  color: white;
-}
-
-a:hover {
-  color: 0;
-}
-
 /* footer */
 
 footer {
@@ -10971,5 +10963,17 @@ footer small {
 footer img.brand-icon {
   width: 17px;
   height: 17px;
+}
+
+/* Users edit */
+
+.gravatar_edit {
+  margin: 15px auto;
+  text-align: center;
+}
+
+.gravatar_edit .gravatar {
+  float: none;
+  max-width: 100px;
 }
 

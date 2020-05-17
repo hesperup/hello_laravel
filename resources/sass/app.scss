@@ -13,12 +13,6 @@ $navbar-color: #3c3e42;
   background-color: $navbar-color;
 }
 
-a {
-  color: white;
-  &:hover {
-    color: blue($color: #000000);
-  }
-}
 
 /* footer */
 footer {
