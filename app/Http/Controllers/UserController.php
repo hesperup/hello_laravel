@@ -34,4 +34,27 @@ class UserController extends Controller
         session()->flash('success','欢迎您来到这片荒原！');
         return redirect()->route('user.show', [$user]);
     }
+
+    public function edit(User $user )
+    {
+        # code...
+        return view('user.edit',compact('user'));
+    }
+    
+    public function update(User $user = null, Request $request )
+    {
+        # code...
+        $this->validate($request,[
+            'name'=>'required|max:50',
+            'password'=>'nullable|confirmed|min:6'
+        ]);
+        $data =[];
+        $data['name'] = $request->name;
+        if($request->password){
+            $data['password'] = bcrypt($request->password);
+        }
+        $user->update($data);
+        session()->flash('success', '个人资料更新成功！');
+        return redirect()->route('users.show',$user->id);
+    }
 }
