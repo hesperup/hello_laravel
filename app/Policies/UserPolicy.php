@@ -92,4 +92,10 @@ class UserPolicy
     {
         //
     }
+
+    public function follow(User $current,User $user)
+    {
+        # code...
+        return $current->id !== $user->id;
+    }
 }
