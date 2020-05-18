@@ -26,9 +26,9 @@ class UserController extends Controller
     public function show(User $user)
     {
         $statuses = $user->statuses()
-                        ->orderBy('created_at','desc')
-                        ->paginate(10);
-        return view('user.show', compact('user','statuses'));
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+        return view('user.show', compact('user', 'statuses'));
     }
     public function store(Request $request)
     {
@@ -42,7 +42,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
-       
+
         $this->sendEmailConfirmationTo($user);
         session()->flash('success', '验证邮件已发送到你的注册邮箱上，请注意查收。');
         return redirect('/');
@@ -58,8 +58,8 @@ class UserController extends Controller
         $data = compact('user');
         $to = $user->email;
         $subject = "感谢注册 WeiBo APP ! 请确认您的邮箱。";
-        Mail::send($view, $data, function ($message) 
-        use ( $to, $subject){
+        Mail::send($view, $data, function ($message)
+        use ($to, $subject) {
             $message->to($to)->subject($subject);
         });
     }
@@ -67,17 +67,17 @@ class UserController extends Controller
     public function confirmEmail($token)
     {
         # code...
-        $user = User::where('activation_token',$token)->firstOrFail();
+        $user = User::where('activation_token', $token)->firstOrFail();
 
         $user->activated = true;
         $user->activation_token = null;
         $user->save();
 
         Auth::login($user);
-        session()->flash('success','恭喜你，激活成功');
-        return redirect()->route('users.show',[$user]);
+        session()->flash('success', '恭喜你，激活成功');
+        return redirect()->route('users.show', [$user]);
     }
-    
+
 
     public function edit(User $user)
     {
@@ -115,16 +115,28 @@ class UserController extends Controller
         return back();
     }
 
+    public function followings(User $user)
+    {
+        $users = $user->followings()->paginate(15);
+        $title = $user->name . '关注的人';
+        return view('user.show_follow', compact('users', 'title'));
+    }
+
+    public function followers(User $user)
+    {
+        $users = $user->followers()->paginate(15);
+        $title = $user->name . '的粉丝';
+        return view('user.show_follow', compact('users', 'title'));
+    }
+
     public function __construct()
     {
         # code...
         $this->middleware('auth', [
-            'except' => ['create','store', 'index', 'show','confirmEmail']
+            'except' => ['create', 'store', 'index', 'show', 'confirmEmail']
         ]);
         $this->middleware('guest', [
             'only' => ['create']
         ]);
     }
-
-
 }
