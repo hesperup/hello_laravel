@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -38,10 +39,44 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
-        Auth::login($user);
-        session()->flash('success', '欢迎您来到这片荒原！');
-        return redirect()->route('user.show', [$user]);
+       
+        $this->sendEmailConfirmationTo($user);
+        session()->flash('success', '验证邮件已发送到你的注册邮箱上，请注意查收。');
+        return redirect('/');
+        // Auth::login($user);
+        //session()->flash('success', '欢迎您来到这片荒原！');
+        //return redirect()->route('user.show', [$user]);
     }
+
+    protected function sendEmailConfirmationTo($user)
+    {
+        # code...
+        $view = 'emails.confirm';
+        $data = compact('user');
+        $from =  'Hesper@weibo.com';
+        $name = 'Hesper';
+        $to = $user->email;
+        $subject = "感谢注册 WeiBo APP ! 请确认您的邮箱。";
+        Mail::send($view, $data, function ($message) 
+        use ($from, $name, $to, $subject){
+            $message->from($from, $name)->to($to)->subject($subject);
+        });
+    }
+
+    public function confirmEmail($token)
+    {
+        # code...
+        $user = User::where('activation_token',$token)->firstOrFail();
+
+        $user->activated = true;
+        $user->activation_token = null;
+        $user->save();
+
+        Auth::login($user);
+        session()->flash('success','恭喜你，激活成功');
+        return redirect()->route('users.show',[$user]);
+    }
+    
 
     public function edit(User $user)
     {
@@ -83,7 +118,7 @@ class UserController extends Controller
     {
         # code...
         $this->middleware('auth', [
-            'except' => ['store', 'index', 'show']
+            'except' => ['create','store', 'index', 'show','confirmEmail']
         ]);
         $this->middleware('guest', [
             'only' => ['create']
