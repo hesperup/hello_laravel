@@ -25,7 +25,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        $statuses = $user->statusses()
+        $statuses = $user->statuses()
                         ->orderBy('created_at','desc')
                         ->paginate(10);
         return view('user.show', compact('user','statuses'));

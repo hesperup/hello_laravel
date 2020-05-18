@@ -55,7 +55,7 @@ class User extends Authenticatable
         });
     }
 
-    public function statusses()
+    public function statuses()
     {
         return $this->hasMany(Status::class);
         # code...
