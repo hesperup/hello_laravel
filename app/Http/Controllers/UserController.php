@@ -53,13 +53,11 @@ class UserController extends Controller
         # code...
         $view = 'emails.confirm';
         $data = compact('user');
-        $from =  'Hesper@weibo.com';
-        $name = 'Hesper';
         $to = $user->email;
         $subject = "感谢注册 WeiBo APP ! 请确认您的邮箱。";
         Mail::send($view, $data, function ($message) 
-        use ($from, $name, $to, $subject){
-            $message->from($from, $name)->to($to)->subject($subject);
+        use ( $to, $subject){
+            $message->to($to)->subject($subject);
         });
     }
 
